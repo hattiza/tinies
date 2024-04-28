@@ -1,6 +1,8 @@
 // swap two numbers
 // no returns, just console.log
 // func only for ease of testing 
+// Time Complexity: O(1)
+// Space Complexity: O(1)
 
 function swap(a, b) {
     console.log("a = " + a + " b = " + b);
@@ -22,6 +24,3 @@ swap(10, 5);
 swap(-10, 5);
 swap(10, -5);
 swap(-3, -3);
-
-// Time Complexity: O(1)
-// Space Complexity: O(1)
