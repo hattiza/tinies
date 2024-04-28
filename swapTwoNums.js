@@ -1,4 +1,5 @@
 // swap two numbers
+// no returns, just console.log
 // func only for ease of testing 
 
 function swap(a, b) {
