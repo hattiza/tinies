@@ -1,4 +1,4 @@
-// swap two numbers
+// swap two integers
 // no returns, just console.log
 // func only for ease of testing 
 // Time Complexity: O(1)
