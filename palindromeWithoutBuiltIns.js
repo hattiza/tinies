@@ -35,6 +35,12 @@ function palindrome(string) {
     reverseString = alphaNumeric + reverseString;
   }
 
+  // return false if all characters were non-alphanumeric and 
+  // both strings end up empty
+  if (newString.length === 0) {
+    return false
+  }
+
   return newString === reverseString;
 }
 
@@ -51,3 +57,4 @@ palindrome("My age is 0, 0 si ega ym.") === true;
 palindrome("1 eye for of 1 eye.") === false;
 palindrome("0_0 (: /-\ :) 0-0") === true;
 palindrome("five|\_/|four") === false;
+palindrome("/*$&") === false;
