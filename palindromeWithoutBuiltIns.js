@@ -36,7 +36,9 @@ function palindrome(string) {
   }
 
   // return false if all characters were non-alphanumeric and 
-  // both strings end up empty
+  // both strings end up empty, or it was empty to start
+  // technically start with empty could be considered palindome
+  // so there would be check up top, but that's just specification decision
   if (newString.length === 0) {
     return false
   }
