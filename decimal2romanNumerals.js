@@ -22,7 +22,49 @@ All roman numerals should be provided in upper-case
 
 */
 
-function convertToRoman(num) {}
+function convertToRoman(num) {
+  const conversion = {
+    1000: "M",
+    900: "CM",
+    500: "D",
+    400: "CD",
+    100: "C",
+    90: "XC",
+    50: "L",
+    40: "XL",
+    10: "X",
+    9: "IX",
+    5: "V",
+    4: "IV",
+    1: "I",
+  };
+
+  // Get keys and sort them
+  // turn the keys to integers
+  // Get keys and sort them
+  const sortedDecimals = Object.keys(conversion)
+    .map(Number)
+    .sort(function (a, b) {
+      return b - a;
+    });
+
+  let leftNum = num;
+  let romanChar = "";
+
+  for (let i = 0; i < sortedDecimals.length; i++) {
+    let currentDecimal = sortedDecimals[i];
+    let currentRomanChar = conversion[currentDecimal];
+    let newRoman = leftNum - (leftNum % currentDecimal);
+    leftNum = leftNum - newRoman;
+
+    while (newRoman > 0) {
+      newRoman = newRoman - currentDecimal;
+      romanChar += currentRomanChar;
+    }
+  }
+
+  return romanChar;
+}
 
 convertToRoman(2) === "II";
 convertToRoman(3) === "III";
