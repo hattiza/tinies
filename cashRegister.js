@@ -56,85 +56,97 @@ function fetchType(moneyRequestedName, cashRegisterState) {
   return "NO SUCH MONIES";
 }
 
-function checkCashRegister(price, cash, cid) {
+function isFloat(n) {
+  return Number(n) === n && n % 1 !== 0;
+}
 
-    // return from biggest to smallest 
-    let change = cash - price;
-    let changeSoFar = 0;
-
-    let moduloCents = {
-      "PENNY" : 1,
-      "NICKEL" : 5,
-      "DIME" : 10,
-      "QUARTER" : 25
+function isClosed(cashRegister, returnValues) {
+  for (let i = 0; i < cashRegister.length; i++) {
+    if (cashRegister[i][1] !== 0) {
+      return false;
     }
+  }
 
-    let moduloNotes = {
-      "ONE" : 1,
-      "FIVE" : 5,
-      "TEN" : 10,
-      "TWENTY" : 20,
-      "ONE HUNDRED" : 100,
+  // if true, swap values for some reason?? when closed change includes zeros
+  for (let i = 0; i < returnValues.length; i++) {
+    let returnedName = returnValues[i][0];
+    for (let i = 0; i < cashRegister.length; i++) {
+      if (cashRegister[i][0] === returnedName) {
+        cashRegister[i][1] = returnValues[i][1];
+      }
     }
+  }
+  return true;
+}
 
-    // split to cents and dollars
-
-    for (let i = cid.length -1 ; i >= 0; i--) {
-      let moneyType = cid[i][0]
-      let moneyValue = cid[i][0]
-
-      // does change fit in the current value
-      if ()
-
+function updateCashRegister(moneyType, cashRegister, amount) {
+  // console.log(cashRegister, moneyType, amount);
+  for (let i = 0; i < cashRegister.length; i++) {
+    let nameInCash = cashRegister[i][0];
+    if (nameInCash === moneyType) {
+      cashRegister[i][1] = amount;
     }
-
-
-    // while (change > changeSoFar) {
-    //   // check if it is divisible by money-type
-    //   // use that money-type to pay some 
-    // }
-
-    console.log(fetchType("ONE HUNDRED", cid) )
-
-
-    if (changeSoFar === change) {
-      return {}
-    } else {
-      return {status: "INSUFFICIENT_FUNDS", change: []};
-    }
-
-
-
-
-
-
+  }
 }
 
 
-console.log(checkCashRegister(19.5, 20, 
-  [["PENNY", 1.01],
-   ["NICKEL", 2.05],
-   ["DIME", 3.1],
-   ["QUARTER", 4.25],
-   ["ONE", 90],
-   ["FIVE", 55],
-   ["TEN", 20],
-   ["TWENTY", 60],
-   ["ONE HUNDRED", 100]]))
 
+function checkCashRegister(price, cash, cid) {
+  let dollars = cash - price;
+  let moduloNotes = {
+    "PENNY": 0.01,
+    "NICKEL": 0.05,
+    "DIME": 0.10,
+    "QUARTER": 0.25,
+    "ONE": 1,
+    "FIVE": 5,
+    "TEN": 10,
+    "TWENTY": 20,
+    "ONE HUNDRED": 100,
+  }
 
-// TESTS:
-/*
-checkCashRegister(19.5, 20,[["PENNY", 1.01], ["NICKEL", 2.05], ["DIME", 3.1], ["QUARTER", 4.25], ["ONE", 90], ["FIVE", 55], ["TEN", 20], ["TWENTY", 60], ["ONE HUNDRED", 100]])
-// => should return an object.
-checkCashRegister(19.5, 20, [["PENNY", 1.01], ["NICKEL", 2.05], ["DIME", 3.1], ["QUARTER", 4.25], ["ONE", 90], ["FIVE", 55], ["TEN", 20], ["TWENTY", 60], ["ONE HUNDRED", 100]])
-// => should return {status: "OPEN", change: [["QUARTER", 0.5]]}.
-checkCashRegister(3.26, 100, [["PENNY", 1.01], ["NICKEL", 2.05], ["DIME", 3.1], ["QUARTER", 4.25], ["ONE", 90], ["FIVE", 55], ["TEN", 20], ["TWENTY", 60], ["ONE HUNDRED", 100]])
-// => should return {status: "OPEN", change: [["TWENTY", 60], ["TEN", 20], ["FIVE", 15], ["ONE", 1], ["QUARTER", 0.5], ["DIME", 0.2], ["PENNY", 0.04]]}.
-checkCashRegister(19.5, 20, [["PENNY", 0.01], ["NICKEL", 0], ["DIME", 0], ["QUARTER", 0], ["ONE", 0], ["FIVE", 0], ["TEN", 0], ["TWENTY", 0], ["ONE HUNDRED", 0]])
-// => should return {status: "INSUFFICIENT_FUNDS", change: []}.
-checkCashRegister(19.5, 20, [["PENNY", 0.01], ["NICKEL", 0], ["DIME", 0], ["QUARTER", 0], ["ONE", 1], ["FIVE", 0], ["TEN", 0], ["TWENTY", 0], ["ONE HUNDRED", 0]])
-// => should return {status: "INSUFFICIENT_FUNDS", change: []}.
-checkCashRegister(19.5, 20, [["PENNY", 0.5], ["NICKEL", 0], ["DIME", 0], ["QUARTER", 0], ["ONE", 0], ["FIVE", 0], ["TEN", 0], ["TWENTY", 0], ["ONE HUNDRED", 0]])
-// => should return {status: "CLOSED", change: [["PENNY", 0.5], ["NICKEL", 0], ["DIME", 0], ["QUARTER", 0], ["ONE", 0], ["FIVE", 0], ["TEN", 0], ["TWENTY", 0], ["ONE HUNDRED", 0]]}.
-*/
+  let keys = Object.keys(moduloNotes);     // [ 'ONE', 'FIVE', 'TEN', 'TWENTY', 'ONE HUNDRED' ] 
+  let values = Object.values(moduloNotes); // [ 1, 5, 10, 20, 100 ]
+  let returnValues = [];
+
+  for (let i = keys.length - 1; i >= 0; i--) {
+    let moneyType = keys[i];
+    let moneyValue = values[i];
+
+    // how mich of given type do I have, e.g: how many hundreds
+    let inRegister = fetchType(moneyType, cid);
+    // console.log(moneyType);
+
+    // how many can I fill
+    let canUse = Math.floor(dollars / moneyValue) * moneyValue;
+
+    let returnNow = 0;
+
+    while (canUse !== 0 && inRegister > 0) {
+      dollars -= moneyValue;
+      inRegister -= moneyValue;
+      returnNow += moneyValue;
+      if (isFloat(dollars)) { dollars = parseFloat(dollars.toFixed(2)); }
+      if (isFloat(inRegister)) { inRegister = parseFloat(inRegister.toFixed(2)); }
+      if (isFloat(returnNow)) { returnNow = parseFloat(returnNow.toFixed(2)); }
+
+      canUse = Math.floor(dollars / moneyValue) * moneyValue;
+    }
+
+    if (returnNow > 0) {
+      returnValues.push([moneyType, returnNow]);
+    }
+    updateCashRegister(moneyType, cid, inRegister)
+  }
+
+  if (dollars > 0) {
+    return { status: "INSUFFICIENT_FUNDS", change: [] };
+  }
+
+  if (isClosed(cid, returnValues)) {
+    return { status: "CLOSED", change: cid }
+  }
+
+  return { status: "OPEN", change: returnValues }
+
+}
