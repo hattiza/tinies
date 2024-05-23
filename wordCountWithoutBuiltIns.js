@@ -10,31 +10,32 @@
 
 function countWords(string) {
     let words = 0;
-    let nonSpace = false;
-    let space = false;
+    let wordScanner = false;
+    let spaceScanner = false;
 
     for (let i = 0; i < string.length; i++) {
         let character = string[i];
 
-        // if character is a space, set space to true
+        // if character is a space, set spaceScanner to true
         if (character === " ") {
-            space = true;
-            // if character is not a space, set nonSpace to true
-            // and reset space to false
+            spaceScanner = true;
+        // if character is not a space, set wordScanner to true
+        // and reset spaceScanner to false (while we are scanning a word it is no longer a space)
         } else {
-            nonSpace = true;
-            space = false;
+            wordScanner = true;
+            spaceScanner = false;
         }
 
-        // if space and nonSpace are both true, you are at the end of a word
-        // count the word and set nonSpace to false 
-        if (space && nonSpace) {
+        // if spaceScanner and wordScanner are both true, you just finished scanning a word and swapped to a space
+        // count the finished word and set wordScanner to false (ready for next word)
+        if (spaceScanner && wordScanner) {
             words++;
-            nonSpace = false;
+            wordScanner = false;
         }
     }
-    // if the string ended with a character it did not get counted
-    if (nonSpace) {
+    // if you reached the end of the string end wordScanner is true, it did not get counted yet
+    // as it only gets reset after being counted
+    if (wordScanner) {
         words++;
     }
 
