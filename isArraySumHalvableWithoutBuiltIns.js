@@ -1,4 +1,4 @@
-function isMiddlable(array) {
+function isHalvable(array) {
   // if it is length 1 return false explicitly,
   // to prevent false positive on [0] (all else would be false anyway)
   if (array.length === 1) return false;
@@ -8,9 +8,9 @@ function isMiddlable(array) {
     sumAll += array[i];
   }
 
-  let isHalvable = sumAll % 2 === 0;
+  let hasHalves = sumAll % 2 === 0;
 
-  if (isHalvable) {
+  if (hasHalves) {
     let halve = sumAll / 2;
     let sumFirstHalf = 0;
 
@@ -24,7 +24,7 @@ function isMiddlable(array) {
   return false;
 }
 
-console.log(isMiddlable([1, 1, 2])); // => true
-console.log(isMiddlable([0])); // ==> false
-console.log(isMiddlable([1, 1, 2, -2, 2])); // ==> true
-console.log(isMiddlable([2, -2])); // ==> true [] and [-2, 2]
+console.log(isHalvable([1, 1, 2])); // => true
+console.log(isHalvable([0])); // ==> false
+console.log(isHalvable([1, 1, 2, -2, 2])); // ==> true
+console.log(isHalvable([2, -2])); // ==> true [] and [-2, 2]
