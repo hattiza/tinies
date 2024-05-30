@@ -11,7 +11,6 @@ function isMiddlable(array) {
   let isHalvable = sumAll % 2 === 0;
 
   if (isHalvable) {
-    //  find the index of the sum of the first half of the array
     let halve = sumAll / 2;
     let sumFirstHalf = 0;
 
