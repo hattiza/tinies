@@ -16,9 +16,8 @@ function addOne(array) {
     }
   }
   // when done // check if array[0] === 0
-  // if it is, shift everything to the right
+  // if true, the array was all 9s and now is all zeros [0,0,0,0,(...)] , neds to shift it to the next number place
   if (array[0] === 0) {
-    // if l(0) === 0, the array is all zeros [0,0,0,0,(...)]
     // add 0 at the back 
     array[array.length] = 0;
     // and 1 in the front
